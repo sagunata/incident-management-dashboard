@@ -5,41 +5,48 @@
 - PostgreSQL (Must be running locally on port 5432)
 
 ### 1. Database and Backend Setup
-Open a terminal in the backend folder and run the following command:
+Open a terminal in the `backend` folder and run the following command:
 
 ```bash
 npm install
 ```
 
-Create a .env file in the backend folder and add your PostgreSQL URL:
+Create a `.env` file in the backend folder and add your PostgreSQL URL:
 
-> DATABASE_URL="postgresql://username:password@127.0.0.1:5432/incident_db?schema=public"
+```env
+DATABASE_URL="postgresql://username:password@127.0.0.1:5432/incident_db?schema=public"
+```
 
-Create the database schema:
+Create the database schema and start the backend:
 
-> npx prisma db push
+```bash
+npx prisma db push
+npm run start:dev
+```
 
-Start the backend:
-
-> npm run start:dev
-
-*The backend will start running at http://127.0.0.1:3000.*
+*The backend will start running at [http://127.0.0.1:3000](http://127.0.0.1:3000).*
 
 ### 2. Frontend Setup
-Open a terminal in the frontend folder and run the following command:
+Open a terminal in the `frontend` folder and run the following command:
 
-> npm install
+```bash
+npm install
+```
 
-Create a .env.local file in the frontend folder with the following content:
+Create a `.env.local` file in the frontend folder with the following content:
 
-> NEXT_PUBLIC_API_URL=http://127.0.0.1:3000
-> GEMINI_API_KEY=your_gemini_api_key
+```env
+NEXT_PUBLIC_API_URL=http://127.0.0.1:3000
+GEMINI_API_KEY=your_gemini_api_key
+```
 
-*Note: If you do not want to use Gemini, update the src/app/api/ai/route.ts file.*
+*Note: If you do not want to use Gemini, update the `src/app/api/ai/route.ts` file.*
 
 Start the frontend:
 
-> npm run dev
+```bash
+npm run dev
+```
 
 *You can access the interface at http://localhost:3001.*
 
@@ -69,7 +76,7 @@ Start the frontend:
 
 ---
 
-## Future Improvements
+## Future Improvements (With More Time)
 
 - **Comprehensive Testing:** Backend unit tests with Jest and frontend end-to-end (E2E) tests with Cypress/Playwright could be added.
 - **Dockerization and CI/CD:** A fully-fledged `docker-compose` architecture could be established to guarantee 100% identical operation across all environments, along with automated build pipelines using GitHub Actions.
