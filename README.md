@@ -1,81 +1,71 @@
-# Incident Management Dashboard
+## Setup and Execution
 
-Bu proje, sistem kesintilerini ve olayları (incident) yönetmek, takip etmek ve listelemek için geliştirilmiş bir Full-Stack web uygulamasıdır. 
+### Prerequisites
+- Node.js (v18 or higher)
+- PostgreSQL (Must be running locally on port 5432)
 
-## 🚀 Kurulum ve Çalıştırma Adımları
+### 1. Database and Backend Setup
+Open a terminal in the backend folder and run the following command:
 
-Proje yerel (local) ortamda çalışacak şekilde yapılandırılmıştır.
+> npm install
 
-### Ön Koşullar
-- Node.js (v18 veya üzeri)
-- PostgreSQL (Yerel ortamda 5432 portunda çalışır durumda olmalıdır)
+Create a .env file in the backend folder and add your PostgreSQL URL:
 
-### 1. Veritabanı ve Backend Kurulumu
-Ayrı bir terminal açın ve backend dizinine gidin:
-\`\`\`bash
-cd backend
-npm install
-\`\`\`
+> DATABASE_URL="postgresql://username:password@127.0.0.1:5432/incident_db?schema=public"
 
-\`backend\` dizininde bir \`.env\` dosyası oluşturun ve PostgreSQL bağlantı dizesini ekleyin:
-\`\`\`env
-DATABASE_URL="postgresql://kullanici_adi:sifre@127.0.0.1:5432/incident_db?schema=public"
-\`\`\`
+Create the database schema and start the backend:
 
-Veritabanı şemasını oluşturun ve backend'i başlatın:
-\`\`\`bash
-npx prisma db push
-npm run start:dev
-\`\`\`
-*Backend http://127.0.0.1:3000 adresinde çalışmaya başlayacaktır.*
+> npx prisma db push
+> npm run start:dev
 
-### 2. Frontend Kurulumu
-Yeni bir terminal açın ve frontend dizinine gidin:
-\`\`\`bash
-cd frontend
-npm install
-\`\`\`
+*The backend will start running at http://127.0.0.1:3000.*
 
-\`frontend\` dizininde bir \`.env.local\` dosyası oluşturun:
-\`\`\`env
-NEXT_PUBLIC_API_URL=http://127.0.0.1:3000
-\`\`\`
+### 2. Frontend Setup
+Open a terminal in the frontend folder and run the following command:
 
-Frontend'i başlatın:
-\`\`\`bash
-npm run dev
-\`\`\`
-*Arayüze http://localhost:3001 adresinden erişebilirsiniz.*
+> npm install
+
+Create a .env.local file in the frontend folder with the following content:
+
+> NEXT_PUBLIC_API_URL=http://127.0.0.1:3000
+> GEMINI_API_KEY=your_gemini_api_key
+
+*Note: If you do not want to use Gemini, update the src/app/api/ai/route.ts file.*
+
+Start the frontend:
+
+> npm run dev
+
+*You can access the interface at http://localhost:3001.*
 
 ---
 
-## 🛠 Kullanılan Teknolojiler
+## Technologies Used
 
 - **Frontend:** Next.js (React), Tailwind CSS, Axios
 - **Backend:** NestJS (Node.js), TypeScript
-- **Veritabanı & ORM:** PostgreSQL, Prisma
-- **Gerçek Zamanlı İletişim:** WebSocket (Socket.io)
+- **Database & ORM:** PostgreSQL, Prisma
+- **Real-Time Communication:** WebSocket (Socket.io)
 
 ---
 
-## 🏗 Mimari Yaklaşım
+## Architectural Approach
 
-- **Monorepo Benzeri Yapı:** Hem frontend hem de backend kodları, geliştirme ve inceleme kolaylığı açısından aynı repository altında izole klasörlerde (`/frontend` ve `/backend`) tutulmuştur.
-- **RESTful API & Validasyon:** Backend mimarisi REST standartlarına uygun tasarlanmış, gelen tüm istekler `ValidationPipe` ve DTO'lar (Data Transfer Objects) ile sıkı bir şekilde denetlenmiştir.
-- **Güvenli Ağ İletişimi:** DNS çözümleme (localhost IPv4/IPv6) farklılıklarından doğabilecek CORS ve bağlantı hatalarını önlemek adına, servisler arası iletişim evrensel `127.0.0.1` IP'si üzerinden sabitlenmiştir.
-
----
-
-## 📌 Yapılan Varsayımlar
-
-- Uygulamanın değerlendirme aşamasında kolayca incelenebilmesi için kimlik doğrulama (Authentication/Authorization) adımları kapsam dışı bırakılmış veya basitleştirilmiştir.
-- Projeyi inceleyen ekibin kendi yerel PostgreSQL sunucularına sahip olduğu varsayılmış, bu nedenle sistem doğrudan `localhost/127.0.0.1` üzerinden veritabanına bağlanacak şekilde ayarlanmıştır.
-- Kurulum karmaşasını (işletim sistemi / Prisma binary uyuşmazlıkları) önlemek ve projenin "çalışan bir çekirdek sistem" önceliğine sadık kalmak adına Docker entegrasyonu bu fazda bilerek dışarıda bırakılmış, yalın `npm` scriptleri tercih edilmiştir.
+- **Monorepo-like Structure:** Both frontend and backend codes are kept in isolated folders (`/frontend` and `/backend`) under the same repository for ease of development and review.
+- **RESTful API & Validation:** The backend architecture is designed according to REST standards, and all incoming requests are strictly validated using `ValidationPipe` and DTOs (Data Transfer Objects).
+- **Secure Network Communication:** To prevent CORS and connection errors that may arise from DNS resolution differences (localhost IPv4/IPv6), inter-service communication is bound to the universal `127.0.0.1` IP.
 
 ---
 
-## 🔮 Daha Fazla Zaman Olsaydı Yapılacak Geliştirmeler
+## Assumptions Made
 
-- **Kapsamlı Test Yazılımı:** Jest ile backend birim (unit) testleri ve Cypress/Playwright ile frontend uçtan uca (E2E) testleri eklenebilirdi.
-- **Dockerizasyon ve CI/CD:** Projenin her ortamda %100 aynı çalışmasını garanti etmek için tam teşekküllü bir `docker-compose` mimarisi kurulup, GitHub Actions ile otomatik derleme hatları oluşturulabilirdi.
-- **Gelişmiş Filtreleme:** Frontend tarafında incident logları için tarih aralığına, servislere veya önem derecesine göre çoklu filtreleme ve arama özellikleri eklenebilirdi.
+- Authentication is considered out of scope.
+- It is assumed that the reviewing team has their own local PostgreSQL servers; therefore, the system is configured to connect to the database directly via `localhost/127.0.0.1`.
+
+---
+
+## Future Improvements
+
+- **Comprehensive Testing:** Backend unit tests with Jest and frontend end-to-end (E2E) tests with Cypress/Playwright could be added.
+- **Dockerization and CI/CD:** A fully-fledged `docker-compose` architecture could be established to guarantee 100% identical operation across all environments, along with automated build pipelines using GitHub Actions.
+- **Advanced Filtering:** Multi-filtering and search capabilities based on date range, services, or severity could be added for incident logs on the frontend.
