@@ -7,15 +7,20 @@
 ### 1. Database and Backend Setup
 Open a terminal in the backend folder and run the following command:
 
-> npm install
+```bash
+npm install
+```
 
 Create a .env file in the backend folder and add your PostgreSQL URL:
 
 > DATABASE_URL="postgresql://username:password@127.0.0.1:5432/incident_db?schema=public"
 
-Create the database schema and start the backend:
+Create the database schema:
 
 > npx prisma db push
+
+Start the backend:
+
 > npm run start:dev
 
 *The backend will start running at http://127.0.0.1:3000.*
